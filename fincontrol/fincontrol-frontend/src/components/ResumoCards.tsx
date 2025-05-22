@@ -1,24 +1,32 @@
-import React from 'react'
+type ResumoFinanceiro = {
+  entradas: number;
+  saidas: number;
+  saldo: number;
+};
 
-const ResumoCards: React.FC = () => {
-  // Valores fixos como exemplo. Depois vamos puxar da API.
-  const saldo = 1500.00;
-  const entradas = 2500.00;
-  const saidas = 1000.00;
+type Props = {
+  resumo: ResumoFinanceiro;
+};
+
+const ResumoCards: React.FC<Props> = ({ resumo }) => {
+  const { entradas, saidas, saldo } = resumo;
+
+  const formatCurrency = (valor: number) =>
+    valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-      <div className="bg-white p-4 rounded shadow text-center">
-        <h2 className="text-lg font-semibold text-gray-700">Saldo</h2>
-        <p className="text-2xl font-bold text-green-600">R$ {saldo.toFixed(2)}</p>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div className="bg-green-100 p-4 rounded shadow">
+        <h3 className="text-lg font-semibold text-green-800">Entradas</h3>
+        <p className="text-xl font-bold">{formatCurrency(entradas)}</p>
       </div>
-      <div className="bg-white p-4 rounded shadow text-center">
-        <h2 className="text-lg font-semibold text-gray-700">Entradas</h2>
-        <p className="text-2xl font-bold text-blue-600">R$ {entradas.toFixed(2)}</p>
+      <div className="bg-red-100 p-4 rounded shadow">
+        <h3 className="text-lg font-semibold text-red-800">Saídas</h3>
+        <p className="text-xl font-bold">{formatCurrency(saidas)}</p>
       </div>
-      <div className="bg-white p-4 rounded shadow text-center">
-        <h2 className="text-lg font-semibold text-gray-700">Saídas</h2>
-        <p className="text-2xl font-bold text-red-600">R$ {saidas.toFixed(2)}</p>
+      <div className="bg-blue-100 p-4 rounded shadow">
+        <h3 className="text-lg font-semibold text-blue-800">Saldo</h3>
+        <p className="text-xl font-bold">{formatCurrency(saldo)}</p>
       </div>
     </div>
   );

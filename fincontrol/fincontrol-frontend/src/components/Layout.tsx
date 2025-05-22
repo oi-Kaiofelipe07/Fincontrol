@@ -4,11 +4,11 @@ import { Outlet } from "react-router-dom";
 
 const Layout = () => {
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-screen bg-gray-100">
       <Sidebar />
-      <div className="flex flex-col flex-1 overflow-hidden">
+      <div className="flex flex-col flex-1">
         <Header />
-        <main className="flex-1 overflow-auto bg-gray-100 p-6">
+        <main className="flex-1 overflow-y-auto p-6">
           <Outlet />
         </main>
       </div>
@@ -17,4 +17,5 @@ const Layout = () => {
 };
 
 export default Layout;
+
 

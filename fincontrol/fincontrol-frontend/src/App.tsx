@@ -4,7 +4,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import TransacoesPage from "./pages/TransacoesPage";
 import Layout from "./components/Layout";
-import CategoriasPage from "./pages/CategoriasPage";
+
 
 function App() {
   return (
@@ -15,7 +15,6 @@ function App() {
       <Route element={<Layout />}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/transacoes" element={<TransacoesPage />} />
-        <Route path="/categorias" element={<CategoriasPage />} />
       </Route>
     </Routes>
   );

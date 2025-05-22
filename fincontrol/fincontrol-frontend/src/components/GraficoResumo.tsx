@@ -1,54 +1,56 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+} from "recharts";
 
-type Transacao = {
-  id: number;
-  valor: number;
-  tipo: "entrada" | "saida";
+type ResumoFinanceiro = {
+  entradas: number;
+  saidas: number;
+  saldo: number;
 };
 
-const GraficoResumo = () => {
-  const [dados, setDados] = useState<{ entrada: number; saida: number }>({ entrada: 0, saida: 0 });
+type Props = {
+  resumo: ResumoFinanceiro;
+};
 
-  const token = localStorage.getItem("accessToken");
-
-  useEffect(() => {
-    if (!token) return;
-
-    axios
-      .get("http://localhost:8000/api/transacoes/", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => {
-        const entradas = res.data
-          .filter((t: Transacao) => t.tipo === "entrada")
-          .reduce((acc: number, t: Transacao) => acc + t.valor, 0);
-        const saidas = res.data
-          .filter((t: Transacao) => t.tipo === "saida")
-          .reduce((acc: number, t: Transacao) => acc + t.valor, 0);
-
-        setDados({ entrada: entradas, saida: saidas });
-      })
-      .catch((err) => console.error("Erro ao carregar dados para gráfico", err));
-  }, [token]);
-
+const GraficoResumo: React.FC<Props> = ({ resumo }) => {
   const data = [
-    { name: "Entradas", valor: dados.entrada },
-    { name: "Saídas", valor: dados.saida },
+    { name: "Entradas", value: resumo.entradas },
+    { name: "Saídas", value: resumo.saidas },
+    { name: "Saldo", value: resumo.saldo },
   ];
+
+  const COLORS = ["#16a34a", "#dc2626", "#4F46E5"];
+
+  const formatCurrency = (value: number) =>
+    value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
   return (
     <div className="bg-white rounded shadow p-4 mt-6">
       <h3 className="text-lg font-bold mb-4">Resumo de Transações</h3>
-      <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={data}>
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
+      <ResponsiveContainer width="100%" height={400}>
+        <PieChart>
+          <Pie
+            data={data}
+            dataKey="value"
+            nameKey="name"
+            cx="50%"
+            cy="50%"
+            outerRadius={120}
+            fill="#8884d8"
+            label={({ name, value }) => `${name}: ${formatCurrency(value)}`}
+          >
+            {data.map((_entry, index) => (
+              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            ))}
+          </Pie>
+          <Tooltip formatter={(value: number) => formatCurrency(value)} />
           <Legend />
-          <Bar dataKey="valor" fill="#4F46E5" />
-        </BarChart>
+        </PieChart>
       </ResponsiveContainer>
     </div>
   );

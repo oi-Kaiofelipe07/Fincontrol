@@ -1,16 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
-
-type Categoria = {
-  id: number;
-  nome: string;
-};
 
 type Props = {
   onNovaTransacao?: () => void;
 };
 
-// Função para formatar como R$
 const formatarParaReal = (valor: string) => {
   const somenteNumeros = valor.replace(/\D/g, "");
   const numero = parseFloat(somenteNumeros) / 100;
@@ -24,7 +18,6 @@ const formatarParaReal = (valor: string) => {
   });
 };
 
-// Função para converter R$ para número decimal
 const desformatarValor = (valorFormatado: string) => {
   return parseFloat(valorFormatado.replace(/\D/g, "")) / 100;
 };
@@ -33,23 +26,9 @@ const NovaTransacaoForm: React.FC<Props> = ({ onNovaTransacao }) => {
   const [valor, setValor] = useState("R$ 0,00");
   const [tipo, setTipo] = useState("entrada");
   const [descricao, setDescricao] = useState("");
-  const [categoriaId, setCategoriaId] = useState("");
-  const [categorias, setCategorias] = useState<Categoria[]>([]);
+  const [data, setData] = useState(() => new Date().toISOString().split("T")[0]);
 
   const token = localStorage.getItem("accessToken");
-
-  useEffect(() => {
-    if (!token) return;
-    axios
-      .get("http://localhost:8000/api/categorias/", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => {
-        const data = res.data.results || res.data; // Suporte a paginação DRF
-        setCategorias(data);
-      })
-      .catch((err) => console.error("Erro ao carregar categorias", err));
-  }, [token]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,7 +40,7 @@ const NovaTransacaoForm: React.FC<Props> = ({ onNovaTransacao }) => {
           valor: desformatarValor(valor),
           tipo,
           descricao,
-          categoria: categoriaId,
+          data,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -71,13 +50,21 @@ const NovaTransacaoForm: React.FC<Props> = ({ onNovaTransacao }) => {
       alert("Transação cadastrada com sucesso!");
       setValor("R$ 0,00");
       setDescricao("");
-      setCategoriaId("");
+      setData(new Date().toISOString().split("T")[0]);
 
       if (onNovaTransacao) onNovaTransacao();
-    } catch (err) {
-      alert("Erro ao cadastrar transação.");
-      console.error(err);
-    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+  if (err.response) {
+    console.error("Erro ao cadastrar transação:", err.response.data);
+    alert("Erro ao cadastrar transação: " + JSON.stringify(err.response.data));
+  } else {
+    console.error(err);
+    alert("Erro desconhecido ao cadastrar transação.");
+  }
+}
+
+
   };
 
   const handleValorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -116,21 +103,16 @@ const NovaTransacaoForm: React.FC<Props> = ({ onNovaTransacao }) => {
         value={descricao}
         onChange={(e) => setDescricao(e.target.value)}
         className="w-full p-2 mb-4 border rounded"
+        required
       />
 
-      <select
-        value={categoriaId}
-        onChange={(e) => setCategoriaId(e.target.value)}
+      <input
+        type="date"
+        value={data}
+        onChange={(e) => setData(e.target.value)}
         className="w-full p-2 mb-4 border rounded"
         required
-      >
-        <option value="">Selecione uma categoria</option>
-        {categorias.map((cat) => (
-          <option key={cat.id} value={cat.id}>
-            {cat.nome}
-          </option>
-        ))}
-      </select>
+      />
 
       <button
         type="submit"

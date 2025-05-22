@@ -4,44 +4,80 @@ import axios from "axios";
 import { useAuth } from "../contexts/useAuth";
 import ResumoCards from "../components/ResumoCards";
 import GraficoTransacoes from "../components/GraficoTransacoes";
+import GraficoResumo from "../components/GraficoResumo";
+import ListaTransacoes from "../components/ListaTransacoes";
+import type { Transacao } from "../types/Transacao";  // ✅ tipo global importado
 
-type Transacao = {
-  id: number;
-  valor: number;
-  tipo: "entrada" | "saida";
-  created_at: string;
+
+type ResumoFinanceiro = {
+  entradas: number;
+  saidas: number;
+  saldo: number;
 };
 
 const Dashboard: React.FC = () => {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [transacoes, setTransacoes] = useState<Transacao[]>([]);
+  const [resumo, setResumo] = useState<ResumoFinanceiro>({
+    entradas: 0,
+    saidas: 0,
+    saldo: 0,
+  });
+
+  const token = localStorage.getItem("accessToken");
 
   const carregarTransacoes = useCallback(async () => {
-    const token = localStorage.getItem("accessToken");
     try {
-      const response = await axios.get("http://localhost:8000/api/transacoes/", {
+      const response = await axios.get("http://localhost:8000/api/transacoes/?ordering=-created_at", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log("Transações recebidas:", response.data);
-      setTransacoes(response.data);
+
+      const dados = response.data.results || response.data;
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const transacoesFormatadas: Transacao[] = dados.map((t: any) => ({
+        id: t.id,
+        valor: Number(t.valor),
+        tipo: t.tipo,
+        descricao: t.descricao ?? "",  // caso não venha
+        data: t.data ?? t.created_at ?? "",  // escolha conforme o backend
+        created_at: t.created_at ?? t.data ?? "", // garantir compatibilidade com GraficoTransacoes
+      }));
+
+      setTransacoes(transacoesFormatadas);
     } catch (error) {
-      console.error("Erro ao carregar transações no Dashboard:", error);
+      console.error("Erro ao carregar transações:", error);
     }
-  }, []);
+  }, [token]);
+
+  const carregarResumo = useCallback(async () => {
+    try {
+      const response = await axios.get("http://localhost:8000/api/resumo/", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setResumo(response.data);
+    } catch (error) {
+      console.error("Erro ao carregar resumo financeiro:", error);
+    }
+  }, [token]);
 
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/login");
     } else {
       carregarTransacoes();
+      carregarResumo();
     }
-  }, [isAuthenticated, navigate, carregarTransacoes]);
+  }, [isAuthenticated, navigate, carregarTransacoes, carregarResumo]);
 
   return (
     <main className="flex-1 p-6 overflow-auto bg-gray-100">
-      <ResumoCards />
+      <ResumoCards resumo={resumo} />
+      <GraficoResumo resumo={resumo} />
+      <h2 className="text-2xl font-bold my-4">Transações Recentes</h2>
       <GraficoTransacoes transacoes={transacoes} />
+      <ListaTransacoes transacoes={transacoes} />
     </main>
   );
 };

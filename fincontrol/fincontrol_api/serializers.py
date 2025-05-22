@@ -1,22 +1,21 @@
 from rest_framework import serializers
-from .models import Categoria, Transacao, Profile
-
-class CategoriaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Categoria
-        fields = '__all__'
-        read_only_fields = ['usuario']
-
+from .models import Transacao, Profile
 
 class TransacaoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transacao
-        fields = '__all__'
-        read_only_fields = ['usuario']
-
+        fields = ['id', 'descricao', 'valor', 'tipo', 'data', 'usuario', 'created_at']
+        read_only_fields = ['usuario', 'created_at']
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = '__all__'
-        read_only_fields = ['usuario']
+        fields = ['id', 'nome', 'cpf', 'telefone', 'endereco']
+
+    def validate_cpf(self, value):
+        user = self.context['request'].user
+        existing_profile = Profile.objects.filter(cpf=value).exclude(usuario=user).first()
+        if existing_profile:
+            raise serializers.ValidationError("Este CPF já está cadastrado por outro usuário.")
+        return value
+
