@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-9*(*7r_b)^@m!qi5=ozgm4y4ddv83(2bvpp308=^)oqj-p6j8-
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-ALLOWED_HOSTS = ['your-backend.onrender.com']
+ALLOWED_HOSTS = ['https://fincontrol-sevd.onrender.com']
 
 
 
@@ -74,7 +74,7 @@ TEMPLATES = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  # URL do seu frontend com Vite
+    "https://fincontrol-project.vercel.app",  # ➡️ Substitua pela URL real do frontend
 ]
 
 REST_FRAMEWORK = {
