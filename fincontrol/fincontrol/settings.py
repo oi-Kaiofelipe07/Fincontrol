@@ -74,7 +74,7 @@ TEMPLATES = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "https://fincontrol-project.vercel.app",  # ➡️ Substitua pela URL real do frontend
+    "https://fincontrol-project.vercel.app", 
 ]
 
 REST_FRAMEWORK = {

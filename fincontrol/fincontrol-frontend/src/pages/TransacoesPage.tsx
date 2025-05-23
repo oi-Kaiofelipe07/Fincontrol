@@ -21,7 +21,7 @@ const TransacoesPage = () => {
   const carregarTransacoes = useCallback(async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8000/api/transacoes/?ordering=-created_at",
+        "https://fincontrol-sevd.onrender.com/api/transacoes/?ordering=-created_at",
         {
           headers: { Authorization: `Bearer ${token}` },
         }

@@ -29,7 +29,7 @@ const Dashboard: React.FC = () => {
 
   const carregarTransacoes = useCallback(async () => {
     try {
-      const response = await axios.get("http://localhost:8000/api/transacoes/?ordering=-created_at", {
+      const response = await axios.get("https://fincontrol-sevd.onrender.com/api/transacoes/?ordering=-created_at", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -53,7 +53,7 @@ const Dashboard: React.FC = () => {
 
   const carregarResumo = useCallback(async () => {
     try {
-      const response = await axios.get("http://localhost:8000/api/resumo/", {
+      const response = await axios.get("https://fincontrol-sevd.onrender.com/api/resumo/", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setResumo(response.data);

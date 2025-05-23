@@ -29,7 +29,7 @@ const Register: React.FC = () => {
 
 
     try {
-      await axios.post('http://localhost:8000/api/register/', {
+      await axios.post('https://fincontrol-sevd.onrender.com/api/register/', {
         username,
         password,
       });

@@ -35,7 +35,7 @@ const NovaTransacaoForm: React.FC<Props> = ({ onNovaTransacao }) => {
 
     try {
       await axios.post(
-        "http://localhost:8000/api/transacoes/",
+        "https://fincontrol-sevd.onrender.com/api/transacoes/",
         {
           valor: desformatarValor(valor),
           tipo,

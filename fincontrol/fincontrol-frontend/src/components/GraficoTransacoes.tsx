@@ -9,7 +9,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { useMemo } from "react";
-import type { Transacao } from "../types/Transacao"; // ✅ Import global
+import type { Transacao } from "../types/Transacao";
 
 type Props = {
   transacoes: Transacao[];

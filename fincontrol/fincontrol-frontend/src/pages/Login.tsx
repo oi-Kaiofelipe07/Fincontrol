@@ -13,7 +13,7 @@ const Login = () => {
     const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-        const response = await axios.post("http://localhost:8000/api/token/", {
+        const response = await axios.post("https://fincontrol-sevd.onrender.com/api/token/", {
         username: email,
         password: senha,
     });
