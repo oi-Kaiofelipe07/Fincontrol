@@ -1,5 +1,3 @@
-Perfeito! Aqui está o **README.md** atualizado com seus links corretos:
-
 ---
 
 # 🏦 FinControl - Sistema de Controle Financeiro
@@ -223,7 +221,4 @@ Este projeto está sob a licença MIT.
 Entre em contato via [LinkedIn](https://www.linkedin.com/in/kaiofelipee/).
 
 ---
-
-✅ **Quer que eu gere esse arquivo já em formato `.md` para você baixar?**
-**\[Sim]** ou **\[Não]**
 
