@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-9*(*7r_b)^@m!qi5=ozgm4y4ddv83(2bvpp308=^)oqj-p6j8-
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-ALLOWED_HOSTS = ['https://fincontrol-sevd.onrender.com']
+ALLOWED_HOSTS = ['fincontrol-sevd.onrender.com']
 
 
 
