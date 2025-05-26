@@ -7,6 +7,7 @@ import { useAuth } from "../contexts/useAuth";
 const Login = () => {
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
     const { login } = useAuth();
 
@@ -45,13 +46,24 @@ const Login = () => {
             required
         />
         <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             placeholder="Senha"
             value={senha}
             onChange={(e) => setSenha(e.target.value)}
             className="w-full p-2 mb-4 border rounded"
             required
         />
+            <div className="flex items-center mb-4">
+            <input
+              type="checkbox"
+              id="showPassword"
+              checked={showPassword}
+              onChange={() => setShowPassword(!showPassword)}
+              className="mr-2"
+            />
+            <label htmlFor="showPassword" className="text-sm">Mostrar senha</label>
+          </div>
+
         <button
             type="submit"
             className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
