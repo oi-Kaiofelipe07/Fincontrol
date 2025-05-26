@@ -6,8 +6,7 @@ import ResumoCards from "../components/ResumoCards";
 import GraficoTransacoes from "../components/GraficoTransacoes";
 import GraficoResumo from "../components/GraficoResumo";
 import ListaTransacoes from "../components/ListaTransacoes";
-import type { Transacao } from "../types/Transacao";  // ✅ tipo global importado
-
+import type { Transacao } from "../types/Transacao";
 
 type ResumoFinanceiro = {
   entradas: number;
@@ -40,9 +39,9 @@ const Dashboard: React.FC = () => {
         id: t.id,
         valor: Number(t.valor),
         tipo: t.tipo,
-        descricao: t.descricao ?? "",  // caso não venha
-        data: t.data ?? t.created_at ?? "",  // escolha conforme o backend
-        created_at: t.created_at ?? t.data ?? "", // garantir compatibilidade com GraficoTransacoes
+        descricao: t.descricao ?? "",
+        data: t.data ?? t.created_at ?? "",
+        created_at: t.created_at ?? t.data ?? "",
       }));
 
       setTransacoes(transacoesFormatadas);
