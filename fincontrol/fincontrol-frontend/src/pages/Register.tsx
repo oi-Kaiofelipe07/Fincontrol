@@ -66,7 +66,7 @@ const Register: React.FC = () => {
 
           <input
             type="text"
-            placeholder="Usuário"
+            placeholder="Email"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             className="w-full px-4 py-2 mb-4 border rounded"
